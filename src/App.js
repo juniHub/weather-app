@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import Advise from './Advise';
+
 
 const api = {
   key: process.env.REACT_APP_WEATHER_KEY,
@@ -9,7 +11,21 @@ function App() {
   const [query, setQuery] = useState('');
   const [weather, setWeather] = useState({});
 
-  const search = (evt) => {
+  
+
+  const searchC = (evt) => {
+    if (evt.key === 'Enter') {
+      fetch(`${api.base}weather?q=${query}&units=metric&APPID=${api.key}`)
+        .then((res) => res.json())
+        .then((result) => {
+          setWeather(result);
+          setQuery('');
+          console.log(result);
+        });
+    }
+  };
+
+  const searchF = (evt) => {
     if (evt.key === 'Enter') {
       fetch(`${api.base}weather?q=${query}&units=metric&APPID=${api.key}`)
         .then((res) => res.json())
@@ -36,11 +52,19 @@ function App() {
           <input
             type="text"
             className="search-bar"
-            placeholder="Enter the city"
+            placeholder="Enter the city name"
             onChange={(e) => setQuery(e.target.value)}
             value={query}
-            onKeyPress={search}
+            onKeyPress={searchC}
           />
+          <div>Or Click here to show C or F degree</div>
+           <button>
+             Search Celsius
+           </button>
+           <button>
+             Search Fahrenheit
+           </button> 
+
         </div>
         {typeof weather.main != 'undefined' ? (
           <div>
@@ -48,24 +72,35 @@ function App() {
               <div className="location">
                 {weather.name}, {weather.sys.country}
               </div>
-              <div className="date">{new Date().toDateString()}</div>
+              <div className="date">{  new Date().toLocaleString()}</div>
+             
             </div>
             <div className="weather-box">
               <div className="temp">{Math.round(weather.main.temp)}°C</div>
               <div className="weather">{weather.weather[0].description}</div>
               <div className="icon">
-                <img
+                <img alt="weather-icon"
                   src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
                 />
               </div>
             </div>
+
+              
+      <Advise/>
+
+
+
           </div>
         ) : (
           <div className="error">
-            Enter your city name to know the current weather!
+            Enter the city name to know the current weather!
           </div>
         )}
+
+
       </main>
+    
+
     </div>
   );
 }
