@@ -30,7 +30,7 @@ class Advise extends React.Component {
         <div className="card">
           <h4 className="heading">{this.state.advice}</h4>
           <button className="button" onClick={this.fetchAdvice}>
-            <span>GIVE ME ADVICE!</span>
+            <span>GET ANOTHER ADVICE!</span>
           </button>
         </div>
       </div>
